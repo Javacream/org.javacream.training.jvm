@@ -10,10 +10,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.javacream.training.jvm.simulation.gc.MemorySimulation;
 import org.javacream.training.jvm.simulation.memory.ApplicationSimulation;
 
 public class SimpleApplicationSimulationGui {
 	private ApplicationSimulation applicationSimulation;
+	private MemorySimulation memorySimulation;
+	public void setMemorySimulation(MemorySimulation memorySimulation) {
+		this.memorySimulation = memorySimulation;
+	}
 
 	public void setApplicationSimulation(
 			ApplicationSimulation applicationSimulation) {
@@ -33,6 +38,7 @@ public class SimpleApplicationSimulationGui {
 		JButton login = new JButton("login");
 		JButton logout = new JButton("logout");
 		final JButton request = new JButton("request");
+		final JButton simulation = new JButton("simulation");
 		JButton exit = new JButton("exit");
 
 		final JTextField inputRequest = new JTextField();
@@ -51,14 +57,17 @@ public class SimpleApplicationSimulationGui {
 		contentPane.add(inputApplication);
 		contentPane.add(new JLabel());
 		contentPane.add(new JLabel());
+		contentPane.add(simulation);
 		contentPane.add(exit);
 
 		request.setEnabled(false);
+		simulation.setEnabled(false);
 		login.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				applicationSimulation.login();
 				request.setEnabled(true);
+				simulation.setEnabled(true);
 			}
 		});
 		logout.addActionListener(new ActionListener() {
@@ -66,9 +75,25 @@ public class SimpleApplicationSimulationGui {
 			public void actionPerformed(ActionEvent e) {
 				applicationSimulation.logout();
 				request.setEnabled(false);
+				simulation.setEnabled(false);
+
 			}
 		});
 
+		simulation.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int mem = Integer.parseInt(System.getProperty("mem", "10"));
+				int loops = Integer.parseInt(System.getProperty("loops", "100"));
+				long pause = Long.parseLong(System.getProperty("pause", "5"));
+				long busy = Long.parseLong(System.getProperty("busy", "5"));
+				System.out.println("using mem=" + mem + " MBytes, loops=" + loops + ", pause=" + pause + ", busy pause=" + busy);
+				long start = System.currentTimeMillis();
+				memorySimulation.doSimulation(mem, loops, pause, busy);
+				System.out.println("memory Simulation took "+ (System.currentTimeMillis() - start) + "msec.");			}
+			
+		});
 		request.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
