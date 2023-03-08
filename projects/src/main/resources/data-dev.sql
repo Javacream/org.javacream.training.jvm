@@ -1,0 +1,13 @@
+drop table KEYS if exists
+create table KEYS (COL_KEY Integer)
+insert into BOOK (isbn, title, price) values ('ISBN1', 'Java', 9.99)
+insert into BOOK (isbn, title, price) values ('ISBN2', 'Spring', 19.99)
+insert into BOOK (isbn, title, price) values ('ISBN3', 'HTML5', 4.99)
+insert into BOOK (isbn, title, price) values ('ISBN4', 'React', 19.99)
+insert into BOOK (isbn, title, price) values ('ISBN5', 'Docker', 29.99)
+insert into STORE (category, item_id, stock) values ('books', 'ISBN1', 10)
+insert into STORE (category, item_id, stock) values ('books', 'ISBN2', 50)
+insert into STORE (category, item_id, stock) values ('books', 'ISBN3', 5)
+insert into STORE (category, item_id, stock) values ('books', 'ISBN4', 20)
+insert into STORE (category, item_id, stock) values ('books', 'ISBN5', 40)
+insert into KEYS values (10)
