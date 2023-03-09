@@ -7,9 +7,12 @@ import javax.transaction.Transactional;
 
 import org.javacream.books.isbngenerator.api.IsbnGenerator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jmx.export.annotation.ManagedAttribute;
+import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Component;
 
 @Component
+@ManagedResource(objectName = "org.javacream.training:type=IsbnGenerator")
 public class DatabaseIsbnGenerator implements IsbnGenerator{
 
 	@PersistenceContext private EntityManager entityManager;
@@ -21,6 +24,29 @@ public class DatabaseIsbnGenerator implements IsbnGenerator{
 		this.suffix = suffix;
 	}
 	private String prefix;
+	
+	@ManagedAttribute(description = "the prefix")
+	public String getPrefix() {
+		return prefix;
+	}
+
+
+	@ManagedAttribute(description = "the prefix")
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
+
+	@ManagedAttribute(description = "the countryCode")
+	public String getSuffix() {
+		return suffix;
+	}
+
+
+	@ManagedAttribute(description = "the countryCode")
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
 	private String suffix;
 	
 

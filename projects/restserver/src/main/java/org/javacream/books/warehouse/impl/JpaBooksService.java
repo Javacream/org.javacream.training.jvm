@@ -11,6 +11,7 @@ import org.javacream.books.isbngenerator.api.IsbnGenerator;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BookException;
 import org.javacream.books.warehouse.api.BooksService;
+import org.javacream.books.warehouse.impl.jmx.BooksSearchMetrics;
 import org.javacream.store.api.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class JpaBooksService implements BooksService {
-
+	@Autowired private BooksSearchMetrics booksSearchMetrics;
 	@Autowired
 	private StoreService storeService;
 	@Autowired
@@ -46,8 +47,10 @@ public class JpaBooksService implements BooksService {
 	public Book findBookByIsbn(String isbn) throws BookException {
 		Optional<Book> result = booksRepository.findById(isbn);
 		if (!result.isPresent()) {
+			booksSearchMetrics.incFailure();
 			throw new BookException(BookException.BookExceptionType.NOT_FOUND, isbn);
 		}
+		booksSearchMetrics.incSuccess();
 		Book book = result.get();
 		book.setAvailable(storeService.getStock("books", isbn) > 0);
 		return book;
